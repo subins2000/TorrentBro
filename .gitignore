@@ -1,6 +1,5 @@
 __pycache__/
 *.py[cod]
-*.sublime
 
 # Python byte code
 *.pyc
@@ -9,3 +8,6 @@ __pycache__/
 # --------
 *.dll
 *.exe
+
+# Sublime project files
+*.sublime*
