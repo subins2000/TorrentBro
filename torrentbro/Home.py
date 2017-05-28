@@ -3,7 +3,7 @@
 from PyQt5 import uic, QtCore
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QMainWindow, QWidget, QAction, qApp, QStyle, QDesktopWidget, QListWidget, QListWidgetItem, QPushButton, QLineEdit, QTextBrowser
+from PyQt5.QtWidgets import QMainWindow, QWidget, QAction, qApp, QStyle, QDesktopWidget, QListWidget, QListWidgetItem, QPushButton, QLineEdit, QTextBrowser, QStatusBar
 
 from tpb import TPB
 
@@ -11,6 +11,8 @@ from tpb import TPB
 class Home(QMainWindow):
 
     baseDir = None
+
+    torrentListInfo = []
 
     def __init__(self, baseDir):
         super().__init__()
@@ -33,38 +35,48 @@ class Home(QMainWindow):
         )
         self.show()
 
-        searchButton = self.findChild(QPushButton, 'searchButton')
-        searchButton.clicked.connect(self.onSearch)
-
-        searchTextbox = self.findChild(QLineEdit, 'searchTextbox')
-        searchTextbox.returnPressed.connect(self.onSearch)
+        self.searchButton.clicked.connect(self.onSearch)
+        self.searchTextbox.returnPressed.connect(self.onSearch)
+        self.torrentList.itemClicked.connect(self.onTorrentSelect)
 
     def initMenubar(self):
-        quitAction = self.findChild(QAction, 'actionQuit')
-        quitAction.triggered.connect(qApp.quit)
+        self.quitAction.triggered.connect(qApp.quit)
 
     def initIntro(self):
-        torrentList = self.findChild(QListWidget, 'torrentList')
-        torrentList.hide()
+        self.torrentList.hide()
+        self.torrentInfo.hide()
+        self.introText.show()
 
     def toggleListDisplay(self):
-        torrentList = self.findChild(QListWidget, 'torrentList')
-        torrentList.show()
-
-        introText = self.findChild(QTextBrowser, 'introText')
-        introText.hide()
+        self.introText.hide()
+        self.torrentList.show()
 
     def onSearch(self):
-        torrentList = self.findChild(QListWidget, 'torrentList')
-        searchQuery = self.findChild(QLineEdit, 'searchTextbox').text()
+        searchQuery = self.searchTextbox.text()
 
         self.toggleListDisplay()
+
+        self.statusBar.showMessage('Searching')
 
         tpb = TPB('https://thepiratebay.org')
         torrents = tpb.search(searchQuery)
 
         for torrent in torrents:
-            torrentList.addItem(torrent.title)
+            self.torrentListInfo.append(torrent)
+            self.torrentList.addItem(torrent.title)
+
+    def onTorrentSelect(self):
+        selectedTorrentIndex = self.torrentList.currentRow()
+
+        self.torrentInfo.setHtml(
+            '''
+            <h1>{title}</h1>
+            '''.format(
+                title=self.torrentListInfo[selectedTorrentIndex].title
+            )
+        )
+
+        self.torrentInfo.show()
 
 
 if __name__ == '__main__':
