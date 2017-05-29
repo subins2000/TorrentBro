@@ -5,7 +5,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QAction, qApp, QStyle, QDesktopWidget, QListWidget, QListWidgetItem, QPushButton, QLineEdit, QTextBrowser, QStatusBar
 
-from tpb import TPB
+from FetchTorrentThread import *
 
 
 class Home(QMainWindow):
@@ -56,14 +56,27 @@ class Home(QMainWindow):
 
         self.toggleListDisplay()
 
+        self.torrentList.clear()
+        self.torrentListInfo = []
+
         self.statusBar.showMessage('Searching')
 
-        tpb = TPB('https://thepiratebay.org')
-        torrents = tpb.search(searchQuery)
+        self.FTT = FetchTorrentThread('search', searchQuery)
+        self.FTT.finished.connect(self.threadOnResponse)
+        self.FTT.start()
 
-        for torrent in torrents:
-            self.torrentListInfo.append(torrent)
+    def threadOnResponse(self, action, *result):
+        if (action == 'searchResultItem'):
+            torrent = result[0]
+
             self.torrentList.addItem(torrent.title)
+            self.torrentListInfo.append(torrent)
+
+        elif (action == 'searchFailed'):
+            self.statusBar.showMessage('Search failed - ' + result[0])
+
+        elif (action == 'searchResultSummary'):
+            self.statusBar.showMessage('Showing ' + str(result[0]) + ' results')
 
     def onTorrentSelect(self):
         selectedTorrentIndex = self.torrentList.currentRow()
