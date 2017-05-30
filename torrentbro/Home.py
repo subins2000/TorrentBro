@@ -1,5 +1,9 @@
 #!/usr/bin/python3
 
+import os
+import subprocess
+import sys
+
 from PyQt5 import uic, QtCore
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
@@ -39,6 +43,9 @@ class Home(QMainWindow):
         self.searchTextbox.returnPressed.connect(self.onSearch)
         self.torrentList.itemClicked.connect(self.onTorrentSelect)
 
+        self.torrentInfoMagnetLink.linkActivated.connect(
+            self.onMagnetLinkClick)
+
     def initMenubar(self):
         self.quitAction.triggered.connect(qApp.quit)
 
@@ -76,20 +83,45 @@ class Home(QMainWindow):
             self.statusBar.showMessage('Search failed - ' + result[0])
 
         elif (action == 'searchResultSummary'):
-            self.statusBar.showMessage('Showing ' + str(result[0]) + ' results')
+            self.statusBar.showMessage(
+                'Showing ' + str(result[0]) + ' results')
 
     def onTorrentSelect(self):
         selectedTorrentIndex = self.torrentList.currentRow()
+        torrent = self.torrentListInfo[selectedTorrentIndex]
 
-        self.torrentInfo.setHtml(
+        self.torrentInfoBasic.setHtml(
             '''
             <h1>{title}</h1>
+            <p>{category} -> {sub_category}</p>
+            <p>Seeders : {seeders}</p>
+            <p>Leechers : {leechers}</p>
             '''.format(
-                title=self.torrentListInfo[selectedTorrentIndex].title
+                title=torrent.title,
+                category=torrent.category,
+                sub_category=torrent.sub_category,
+                seeders=torrent.seeders,
+                leechers=torrent.leechers
+            )
+        )
+
+        self.torrentInfoMagnetLink.setText(
+            '''
+            <a href='{magnet_link}'>Magnet Link</a>
+            '''.format(
+                magnet_link=torrent.magnet_link
             )
         )
 
         self.torrentInfo.show()
+
+    def onMagnetLinkClick(self, magnetURL):
+        if sys.platform.startswith('darwin'):
+            subprocess.call(('open', magnetURL))
+        elif os.name == 'nt':
+            os.startfile(magnetURL)
+        elif os.name == 'posix':
+            subprocess.call(('xdg-open', magnetURL))
 
 
 if __name__ == '__main__':
