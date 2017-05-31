@@ -113,13 +113,19 @@ class Home(QMainWindow):
             )
         )
 
-        self.torrentInfoTorrentLink.setText(
-            '''
-            <a href='{torrent_link}'>Torrent File Link</a>
-            '''.format(
-                torrent_link=torrent.torrent_link
+        if (torrent.torrent_link == None):
+            self.torrentInfoTorrentLink.setText('Torrent File Link')
+            self.torrentInfoTorrentLink.setToolTip(
+                'The torrent site does not provide .torrent file')
+        else:
+            self.torrentInfoTorrentLink.setText(
+                '''
+                <a href='{torrent_link}'>Torrent File Link</a>
+                '''.format(
+                    torrent_link=torrent.torrent_link
+                )
             )
-        )
+            self.torrentInfoTorrentLink.setToolTip('Link to .torrent file')
 
         self.torrentInfo.show()
 
