@@ -43,8 +43,8 @@ class Home(QMainWindow):
         self.searchTextbox.returnPressed.connect(self.onSearch)
         self.torrentList.itemClicked.connect(self.onTorrentSelect)
 
-        self.torrentInfoMagnetLink.linkActivated.connect(
-            self.onMagnetLinkClick)
+        self.torrentInfoMagnetLink.linkActivated.connect(self.onLinkClick)
+        self.torrentInfoTorrentLink.linkActivated.connect(self.onLinkClick)
 
     def initMenubar(self):
         self.quitAction.triggered.connect(qApp.quit)
@@ -113,15 +113,23 @@ class Home(QMainWindow):
             )
         )
 
+        self.torrentInfoTorrentLink.setText(
+            '''
+            <a href='{torrent_link}'>Torrent File Link</a>
+            '''.format(
+                torrent_link=torrent.torrent_link
+            )
+        )
+
         self.torrentInfo.show()
 
-    def onMagnetLinkClick(self, magnetURL):
+    def onLinkClick(self, url):
         if sys.platform.startswith('darwin'):
-            subprocess.call(('open', magnetURL))
+            subprocess.call(('open', url))
         elif os.name == 'nt':
-            os.startfile(magnetURL)
+            os.startfile(url)
         elif os.name == 'posix':
-            subprocess.call(('xdg-open', magnetURL))
+            subprocess.call(('xdg-open', url))
 
 
 if __name__ == '__main__':
