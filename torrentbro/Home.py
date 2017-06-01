@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import datetime
 import os
 import subprocess
 import sys
@@ -10,6 +11,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QAction, qApp, QStyle, QDesktopWidget, QListWidget, QListWidgetItem, QPushButton, QLineEdit, QTextBrowser, QStatusBar
 
 from FetchTorrentThread import *
+from utils import *
 
 
 class Home(QMainWindow):
@@ -64,7 +66,11 @@ class Home(QMainWindow):
     def onSearch(self):
         searchQuery = self.searchTextbox.text()
 
+        if not searchQuery:
+            self.statusBar.showMessage('Please type in something')
+
         self.toggleListDisplay()
+        self.torrentInfo.hide()
 
         self.torrentList.clear()
         self.torrentListInfo = []
@@ -114,6 +120,11 @@ class Home(QMainWindow):
 
                 self.torrentInfoFiles.setText(fileList)
 
+        elif (action == 'torrentInfoDescription'):
+            description = result[0].replace('\n', '<br/>')
+
+            self.torrentInfoDescription.setHtml(Linkify(description).getResult())
+
     '''
     Stop the thread
     '''
@@ -136,19 +147,28 @@ class Home(QMainWindow):
         self.FTT.finished.connect(self.threadOnResponse)
         self.FTT.start()
 
+        '''
+        Clear files list and description
+        '''
+        self.torrentInfoDescription.setText('')
+        self.torrentInfoFiles.setText('')
+
         self.torrentInfoBasic.setHtml(
             '''
             <h1>{title}</h1>
             <p>{category} -> {sub_category}</p>
             <p>Seeders : <b>{seeders}</b>, Leechers : <b>{leechers}</b></p>
             <p>Size : <b>{size}</b></p>
+            <p>Uploaded by <b>{username}</b> on <b>{created}</b></p>
             '''.format(
                 title=torrent.title,
                 category=torrent.category,
                 sub_category=torrent.sub_category,
                 seeders=torrent.seeders,
                 leechers=torrent.leechers,
-                size=torrent.size
+                size=torrent.size,
+                username=torrent.user,
+                created=torrent.created
             )
         )
 
