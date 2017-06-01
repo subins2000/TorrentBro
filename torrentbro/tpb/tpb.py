@@ -337,8 +337,8 @@ class Torrent(object):
     @property
     def files(self):
         if not self._files:
-            path = '/ajax_details_filelist.php?id={id}'.format(id=self.id)
-            url = self.url.path(path)
+            path = '/ajax_details_filelist.php'
+            url = self.url.path(path).query_param('id', self.id)
 
             request = urllib.request.Request(
                 url, headers={'User-Agent': "Magic Browser"})
