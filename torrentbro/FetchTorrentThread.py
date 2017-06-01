@@ -2,7 +2,6 @@
 Handles torrent search
 '''
 
-import sys
 import urllib
 
 from PyQt5.QtCore import QThread, pyqtSignal
@@ -25,12 +24,17 @@ class FetchTorrentThread(QThread):
         self.values = values
         self.runs = True
 
+    def __del__(self):
+        self.wait()
+
     def stop(self):
         self.runs = False
 
     def checkIfStopped(self):
         if not self.runs:
             self.quit()
+            self.wait()
+            self.terminate()
             return True
         else:
             return False
@@ -43,11 +47,11 @@ class FetchTorrentThread(QThread):
             self.tpb = TPB('https://thepiratebay.org')
             torrents = self.tpb.search(searchQuery)
 
+            if self.checkIfStopped():
+                return
+
             torrentCount = 0
             for torrent in torrents:
-                if self.checkIfStopped():
-                    return
-
                 torrentCount += 1
                 self.finished.emit('searchResultItem', torrent)
 
@@ -76,7 +80,7 @@ class FetchTorrentThread(QThread):
             self.finished.emit('torrentInfoDescription', description)
 
         except urllib.error.URLError as e:
-            self.finished.emit('searchFailed', str(e.reason))
+            self.finished.emit('internetFailed', str(e.reason))
 
     def run(self):
         '''
