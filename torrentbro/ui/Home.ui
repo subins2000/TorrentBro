@@ -56,7 +56,7 @@
          </sizepolicy>
         </property>
         <property name="focusPolicy">
-         <enum>Qt::ClickFocus</enum>
+         <enum>Qt::TabFocus</enum>
         </property>
        </widget>
       </item>
@@ -109,7 +109,7 @@ p, li { white-space: pre-wrap; }
          </sizepolicy>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="torrentInfoTabOverview">
          <property name="sizePolicy">
@@ -129,6 +129,20 @@ p, li { white-space: pre-wrap; }
               <horstretch>1</horstretch>
               <verstretch>1</verstretch>
              </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QTextBrowser" name="torrentInfoDescription">
+            <property name="openExternalLinks">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Description :</string>
             </property>
            </widget>
           </item>
@@ -194,7 +208,7 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
           <item row="2" column="0">
-           <widget class="QLabel" name="torrentInfoTorrentLink_2">
+           <widget class="QLabel" name="torrentInfoFilesLabel">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>0</horstretch>
