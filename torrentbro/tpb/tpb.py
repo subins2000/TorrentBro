@@ -349,7 +349,7 @@ class Torrent(object):
             rows = root.findall('.//tr')
 
             if len(rows) == 1 and rows[0].find('td').get('colspan') == str(2):
-                self._files = []
+                self._files = {}
             else:
                 for row in rows:
                     name, size = [unicode(v.text_content())
