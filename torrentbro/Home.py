@@ -18,6 +18,8 @@ class Home(QMainWindow):
 
     torrentListInfo = []
 
+    FTT = None
+
     def __init__(self, baseDir):
         super().__init__()
 
@@ -41,7 +43,8 @@ class Home(QMainWindow):
 
         self.searchButton.clicked.connect(self.onSearch)
         self.searchTextbox.returnPressed.connect(self.onSearch)
-        self.torrentList.itemClicked.connect(self.onTorrentSelect)
+
+        self.torrentList.selectionModel().selectionChanged.connect(self.onTorrentSelect)
 
         self.torrentInfoMagnetLink.linkActivated.connect(self.onLinkClick)
         self.torrentInfoTorrentLink.linkActivated.connect(self.onLinkClick)
@@ -68,9 +71,15 @@ class Home(QMainWindow):
 
         self.statusBar.showMessage('Searching')
 
+        self.stopFTT()
+
         self.FTT = FetchTorrentThread('search', searchQuery)
         self.FTT.finished.connect(self.threadOnResponse)
         self.FTT.start()
+
+    '''
+    Handle response from thread
+    '''
 
     def threadOnResponse(self, action, *result):
         if (action == 'searchResultItem'):
@@ -79,29 +88,67 @@ class Home(QMainWindow):
             self.torrentList.addItem(torrent.title)
             self.torrentListInfo.append(torrent)
 
-        elif (action == 'searchFailed'):
-            self.statusBar.showMessage('Search failed - ' + result[0])
+        elif (action == 'internetFailed'):
+            self.statusBar.showMessage(
+                'Internet operation failed - ' + result[0])
 
         elif (action == 'searchResultSummary'):
-            self.statusBar.showMessage(
-                'Showing ' + str(result[0]) + ' results')
+            resultCount = result[0]
+
+            if(resultCount == 0):
+                self.statusBar.showMessage('No results found')
+            else:
+                self.statusBar.showMessage(
+                    'Showing ' + str(resultCount) + ' results')
+
+        elif (action == 'torrentInfoFiles'):
+            files = result[0]
+
+            if len(files) == 0:
+                self.torrentInfoFiles.setText('File list not available')
+            else:
+                fileList = ''
+
+                for file in files:
+                    fileList += '- ' + file + '<br/>'
+
+                self.torrentInfoFiles.setText(fileList)
+
+    '''
+    Stop the thread
+    '''
+
+    def stopFTT(self):
+        if (self.FTT != None):
+            self.FTT.stop()
+
+    '''
+    On selecting a torrent from list
+    '''
 
     def onTorrentSelect(self):
         selectedTorrentIndex = self.torrentList.currentRow()
         torrent = self.torrentListInfo[selectedTorrentIndex]
 
+        self.stopFTT()
+
+        self.FTT = FetchTorrentThread('torrentDetailedInfo', torrent)
+        self.FTT.finished.connect(self.threadOnResponse)
+        self.FTT.start()
+
         self.torrentInfoBasic.setHtml(
             '''
             <h1>{title}</h1>
             <p>{category} -> {sub_category}</p>
-            <p>Seeders : {seeders}</p>
-            <p>Leechers : {leechers}</p>
+            <p>Seeders : <b>{seeders}</b>, Leechers : <b>{leechers}</b></p>
+            <p>Size : <b>{size}</b></p>
             '''.format(
                 title=torrent.title,
                 category=torrent.category,
                 sub_category=torrent.sub_category,
                 seeders=torrent.seeders,
-                leechers=torrent.leechers
+                leechers=torrent.leechers,
+                size=torrent.size
             )
         )
 
