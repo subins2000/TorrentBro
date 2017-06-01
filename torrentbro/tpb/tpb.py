@@ -347,10 +347,14 @@ class Torrent(object):
             root = html.document_fromstring(response)
 
             rows = root.findall('.//tr')
-            for row in rows:
-                name, size = [unicode(v.text_content())
+
+            if len(rows) == 1 and rows[0].find('td').get('colspan') == str(2):
+                self._files = []
+            else:
+                for row in rows:
+                    name, size = [unicode(v.text_content())
                               for v in row.findall('.//td')]
-                self._files[name] = size.replace('\xa0', ' ')
+                    self._files[name] = size.replace('\xa0', ' ')
         return self._files
 
     @property
