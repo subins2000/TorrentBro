@@ -6,7 +6,7 @@ import urllib
 
 from PyQt5.QtCore import QThread, pyqtSignal
 
-from tpb import TPB
+from lib.tpb import TPB
 
 
 class FetchTorrentThread(QThread):

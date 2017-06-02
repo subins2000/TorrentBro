@@ -10,9 +10,9 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QAction, qApp, QStyle, QDesktopWidget, QListWidget, QListWidgetItem, QPushButton, QLineEdit, QTextBrowser, QStatusBar
 
-from FetchTorrentThread import *
+from lib.FetchTorrentThread import *
+from lib.utils import *
 from ui import *
-from utils import *
 
 
 class Home(QMainWindow):

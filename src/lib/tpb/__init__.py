@@ -30,11 +30,6 @@ ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-import sys
 
-if sys.version_info >= (3, 0):
-    from tpb.tpb import TPB
-    from tpb.constants import ORDERS, CATEGORIES
-else:
-    from tpb import TPB
-    from constants import ORDERS, CATEGORIES
+from lib.tpb.tpb import TPB
+from lib.tpb.constants import ORDERS, CATEGORIES
