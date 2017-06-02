@@ -11,6 +11,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QAction, qApp, QStyle, QDesktopWidget, QListWidget, QListWidgetItem, QPushButton, QLineEdit, QTextBrowser, QStatusBar
 
 from FetchTorrentThread import *
+from ui import *
 from utils import *
 
 
@@ -22,16 +23,16 @@ class Home(QMainWindow):
 
     FTT = None
 
-    def __init__(self, baseDir):
+    def __init__(self):
         super().__init__()
 
-        self.baseDir = baseDir
         self.initUI()
         self.initMenubar()
         self.initIntro()
 
     def initUI(self):
-        uic.loadUi(self.baseDir + '/ui/Home.ui', self)
+        self.ui = Ui_Home()
+        self.ui.setupUi(self)
 
         self.setGeometry(
             QStyle.alignedRect(
@@ -43,39 +44,39 @@ class Home(QMainWindow):
         )
         self.show()
 
-        self.searchButton.clicked.connect(self.onSearch)
-        self.searchTextbox.returnPressed.connect(self.onSearch)
+        self.ui.searchButton.clicked.connect(self.onSearch)
+        self.ui.searchTextbox.returnPressed.connect(self.onSearch)
 
-        self.torrentList.selectionModel().selectionChanged.connect(self.onTorrentSelect)
+        self.ui.torrentList.selectionModel().selectionChanged.connect(self.onTorrentSelect)
 
-        self.torrentInfoMagnetLink.linkActivated.connect(self.onLinkClick)
-        self.torrentInfoTorrentLink.linkActivated.connect(self.onLinkClick)
+        self.ui.torrentInfoMagnetLink.linkActivated.connect(self.onLinkClick)
+        self.ui.torrentInfoTorrentLink.linkActivated.connect(self.onLinkClick)
 
     def initMenubar(self):
-        self.quitAction.triggered.connect(qApp.quit)
+        self.ui.quitAction.triggered.connect(qApp.quit)
 
     def initIntro(self):
-        self.torrentList.hide()
-        self.torrentInfo.hide()
-        self.introText.show()
+        self.ui.torrentList.hide()
+        self.ui.torrentInfo.hide()
+        self.ui.introText.show()
 
     def toggleListDisplay(self):
-        self.introText.hide()
-        self.torrentList.show()
+        self.ui.introText.hide()
+        self.ui.torrentList.show()
 
     def onSearch(self):
-        searchQuery = self.searchTextbox.text()
+        searchQuery = self.ui.searchTextbox.text()
 
         if not searchQuery:
-            self.statusBar.showMessage('Please type in something')
+            self.ui.statusBar.showMessage('Please type in something')
 
         self.toggleListDisplay()
-        self.torrentInfo.hide()
+        self.ui.torrentInfo.hide()
 
-        self.torrentList.clear()
-        self.torrentListInfo = []
+        self.ui.torrentList.clear()
+        self.ui.torrentListInfo = []
 
-        self.statusBar.showMessage('Searching')
+        self.ui.statusBar.showMessage('Searching')
 
         self.stopFTT()
 
@@ -91,39 +92,39 @@ class Home(QMainWindow):
         if (action == 'searchResultItem'):
             torrent = result[0]
 
-            self.torrentList.addItem(torrent.title)
-            self.torrentListInfo.append(torrent)
+            self.ui.torrentList.addItem(torrent.title)
+            self.ui.torrentListInfo.append(torrent)
 
         elif (action == 'internetFailed'):
-            self.statusBar.showMessage(
+            self.ui.statusBar.showMessage(
                 'Internet operation failed - ' + result[0])
 
         elif (action == 'searchResultSummary'):
             resultCount = result[0]
 
             if(resultCount == 0):
-                self.statusBar.showMessage('No results found')
+                self.ui.statusBar.showMessage('No results found')
             else:
-                self.statusBar.showMessage(
+                self.ui.statusBar.showMessage(
                     'Showing ' + str(resultCount) + ' results')
 
         elif (action == 'torrentInfoFiles'):
             files = result[0]
 
             if len(files) == 0:
-                self.torrentInfoFiles.setText('File list not available')
+                self.ui.torrentInfoFiles.setText('File list not available')
             else:
                 fileList = ''
 
                 for file in files:
                     fileList += '- ' + file + '<br/>'
 
-                self.torrentInfoFiles.setText(fileList)
+                self.ui.torrentInfoFiles.setText(fileList)
 
         elif (action == 'torrentInfoDescription'):
             description = result[0].replace('\n', '<br/>')
 
-            self.torrentInfoDescription.setHtml(Linkify(description).getResult())
+            self.ui.torrentInfoDescription.setHtml(Linkify(description).getResult())
 
     '''
     Stop the thread
@@ -138,8 +139,8 @@ class Home(QMainWindow):
     '''
 
     def onTorrentSelect(self):
-        selectedTorrentIndex = self.torrentList.currentRow()
-        torrent = self.torrentListInfo[selectedTorrentIndex]
+        selectedTorrentIndex = self.ui.torrentList.currentRow()
+        torrent = self.ui.torrentListInfo[selectedTorrentIndex]
 
         self.stopFTT()
 
@@ -150,10 +151,10 @@ class Home(QMainWindow):
         '''
         Clear files list and description
         '''
-        self.torrentInfoDescription.setText('')
-        self.torrentInfoFiles.setText('')
+        self.ui.torrentInfoDescription.setText('')
+        self.ui.torrentInfoFiles.setText('')
 
-        self.torrentInfoBasic.setHtml(
+        self.ui.torrentInfoBasic.setHtml(
             '''
             <h1>{title}</h1>
             <p>{category} -> {sub_category}</p>
@@ -172,7 +173,7 @@ class Home(QMainWindow):
             )
         )
 
-        self.torrentInfoMagnetLink.setText(
+        self.ui.torrentInfoMagnetLink.setText(
             '''
             <a href='{magnet_link}'>Magnet Link</a>
             '''.format(
@@ -181,20 +182,20 @@ class Home(QMainWindow):
         )
 
         if (torrent.torrent_link == None):
-            self.torrentInfoTorrentLink.setText('Torrent File Link')
-            self.torrentInfoTorrentLink.setToolTip(
+            self.ui.torrentInfoTorrentLink.setText('Torrent File Link')
+            self.ui.torrentInfoTorrentLink.setToolTip(
                 'The torrent site does not provide .torrent file')
         else:
-            self.torrentInfoTorrentLink.setText(
+            self.ui.torrentInfoTorrentLink.setText(
                 '''
                 <a href='{torrent_link}'>Torrent File Link</a>
                 '''.format(
                     torrent_link=torrent.torrent_link
                 )
             )
-            self.torrentInfoTorrentLink.setToolTip('Link to .torrent file')
+            self.ui.torrentInfoTorrentLink.setToolTip('Link to .torrent file')
 
-        self.torrentInfo.show()
+        self.ui.torrentInfo.show()
 
     def onLinkClick(self, url):
         if sys.platform.startswith('darwin'):

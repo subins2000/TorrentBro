@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>Home</class>
+ <widget class="QMainWindow" name="Home">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -270,8 +270,7 @@ p, li { white-space: pre-wrap; }
   <action name="quitAction">
    <property name="icon">
     <iconset theme="application-exit">
-     <normaloff/>
-    </iconset>
+     <normaloff>ui</normaloff>ui</iconset>
    </property>
    <property name="text">
     <string>Quit</string>
