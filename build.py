@@ -1,7 +1,7 @@
 import os
 import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
+sys.path.append(os.path.join(os.path.dirname(__file__), 'torrentbro'))
 
 
 def build_resources():
@@ -9,7 +9,7 @@ def build_resources():
     from PyQt5.pyrcc_main import main as pyrcc_main_func
 
     QRC_FILE = 'resources.qrc'
-    PY_OUTPUT = os.path.join('src', 'resources.py')
+    PY_OUTPUT = os.path.join('torrentbro', 'resources.py')
 
     sys.argv = ['', '-o', PY_OUTPUT, QRC_FILE]
     pyrcc_main_func()
@@ -22,8 +22,8 @@ def build_ui():
     design_dir = os.path.join(os.path.dirname(__file__), 'designer')
 
     def uicmap(py_dir, py_file):
-        rtn_dir = os.path.join('src', 'ui')
-        rtn_file = py_file.replace('.py', '_ui.py')
+        rtn_dir = os.path.join('torrentbro', 'ui')
+        rtn_file = py_file
 
         return rtn_dir, rtn_file
 
