@@ -1,0 +1,29 @@
+Source: torrentbro
+Section: net
+Priority: optional
+Maintainer: Subin Siby <subins2000@gmail.com>
+Build-Depends: debhelper (>=9),
+               dh-python,
+               python3-all,
+               python3-cssselect,
+               python3-dateutil,
+               python3-lxml,
+               python3-purl,
+               python3-pyqt5,
+               python3-requests,
+               python3-setuptools
+Standards-Version: 3.9.7
+X-Python3-Version: >= 3.2
+Homepage: https://github.com/subins2000/TorrentBro
+#Vcs-Git: git://anonscm.debian.org/collab-maint/torrentbro.git
+#Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/torrentbro.git
+
+Package: torrentbro
+Architecture: any
+Depends: ${python3:Depends},
+         ${misc:Depends}
+Description: Lightweight cross-platform torrent browser
+ TorrentBro is a bro for your torrent searching.
+ .
+ It's a cross-platform torrent browser which
+ uses the Qt framework and written in Python
