@@ -22,7 +22,7 @@ for root, dirs, files in os.walk(baseDir):
 
     for f in files:
         if ".gitignore" in f:
-            os.remove(os.path.join(root, file))
+            os.remove(os.path.join(root, f))
 
 
 '''
