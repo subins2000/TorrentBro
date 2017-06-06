@@ -10,8 +10,14 @@ setup(
     author_email='subins2000@gmail.com',
     description=('A torrent browser.'),
     license='GPL',
-    install_requires=['purl', 'dateutils', 'python-dateutil',
-                      'lxml', 'cssselect', 'requests', 'PyQt5'],
+    install_requires=[
+        'purl',
+        'python-dateutil',
+        'lxml',
+        'cssselect',
+        'requests',
+        'pyqt5'
+    ],
     packages=find_packages(exclude=['designer']),
     entry_points={'gui_scripts': [
         'torrentbro = torrentbro.torrentbro:main'
