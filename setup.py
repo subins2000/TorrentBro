@@ -4,7 +4,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='TorrentBro',
-    version='0.1',
+    version='0.2',
     url='https://github.com/subins2000/torrentbro',
     author='Subin Siby',
     author_email='subins2000@gmail.com',
