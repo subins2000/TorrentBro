@@ -6,6 +6,7 @@ from PyQt5.QtCore import QTranslator, QLocale, QLibraryInfo
 from PyQt5.QtWidgets import QApplication, QWidget
 
 from torrentbro.Home import *
+from torrentbro.ui import resources
 
 
 def main():

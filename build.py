@@ -1,33 +1,30 @@
 import os
 import sys
 
-sys.path.append(os.path.join(os.path.dirname(__file__), 'torrentbro'))
+
+def buildResources():
+    qrcFile = os.path.join(os.path.dirname(__file__),
+                            'designer', 'resources.qrc')
+    pyOutput = os.path.join('torrentbro', 'ui', 'resources.py')
+
+    os.system('pyrcc5 {file} -o {output}'.format(
+        file=qrcFile,
+        output=pyOutput
+    ))
 
 
-def build_resources():
-    import os
-    from PyQt5.pyrcc_main import main as pyrcc_main_func
-
-    QRC_FILE = 'resources.qrc'
-    PY_OUTPUT = os.path.join('torrentbro', 'resources.py')
-
-    sys.argv = ['', '-o', PY_OUTPUT, QRC_FILE]
-    pyrcc_main_func()
-
-
-def build_ui():
-    import os
+def buildUI():
     from PyQt5.uic import compileUiDir
 
-    design_dir = os.path.join(os.path.dirname(__file__), 'designer')
+    designDir = os.path.join(os.path.dirname(__file__), 'designer')
 
-    def uicmap(py_dir, py_file):
-        rtn_dir = os.path.join('torrentbro', 'ui')
-        rtn_file = py_file
+    def uicmap(pyDir, pyFile):
+        rtnDir = os.path.join('torrentbro', 'ui')
+        rtnFile = pyFile
 
-        return rtn_dir, rtn_file
+        return rtnDir, rtnFile
 
-    compileUiDir(design_dir, map=uicmap)
+    compileUiDir(designDir, map=uicmap)
 
 
 def _usage():
@@ -52,12 +49,12 @@ if __name__ == '__main__':
 
     if cmd == 'build':
         if mode == 'resources':
-            build_resources()
+            buildResources()
         elif mode == 'ui':
-            build_ui()
+            buildUI()
         else:
-            # build_resources()
-            build_ui()
+            buildResources()
+            buildUI()
     else:
         _usage()
         sys.exit(1)

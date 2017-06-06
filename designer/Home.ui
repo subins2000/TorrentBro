@@ -25,6 +25,10 @@
   <property name="windowTitle">
    <string>TorrentBro</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>:/icons/icons/24x24.png</normaloff>:/icons/icons/24x24.png</iconset>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
