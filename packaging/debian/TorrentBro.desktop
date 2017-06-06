@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=TorrentBro
+Type=Application
+Exec=torrentbro
+Terminal=false
+Icon=torrentbro
+Categories=Network;
