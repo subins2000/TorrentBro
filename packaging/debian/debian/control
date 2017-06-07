@@ -23,7 +23,4 @@ Architecture: any
 Depends: ${python3:Depends},
          ${misc:Depends}
 Description: Lightweight cross-platform torrent browser
- TorrentBro is a bro for your torrent searching.
- .
- It's a cross-platform torrent browser which
- uses the Qt framework and written in Python
+ TorrentBro is your bro for searching torrents.

@@ -27,7 +27,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>:/icons/icons/48x48.png</normaloff>:/icons/icons/48x48.png</iconset>
+    <normaloff>:/icons/icons/48x48/torrentbro.png</normaloff>:/icons/icons/48x48/torrentbro.png</iconset>
   </property>
   <property name="iconSize">
    <size>
