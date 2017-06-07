@@ -3,7 +3,6 @@
     <file>logo.svg</file>
   </qresource>
   <qresource prefix="icons">
-    <file>icons/24x24.png</file>
-    <file>icons/48x48.png</file>
+    <file>icons/48x48/torrentbro.png</file>
   </qresource>
 </RCC>
