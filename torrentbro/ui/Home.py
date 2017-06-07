@@ -19,7 +19,7 @@ class Ui_Home(object):
         Home.setSizePolicy(sizePolicy)
         Home.setMaximumSize(QtCore.QSize(16777215, 16777215))
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/icons/icons/48x48.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(":/icons/icons/48x48/torrentbro.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         Home.setWindowIcon(icon)
         Home.setIconSize(QtCore.QSize(48, 48))
         self.centralWidget = QtWidgets.QWidget(Home)
