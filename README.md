@@ -13,8 +13,16 @@ A cross-platform Torrent Browser.
 python3 setup.py install
 ```
 
-Or if you have the requirements, then you can directly run without installing by executing `TorrentBro.py` :
+Or if you have the requirements, then you can directly [run](#run) without installing.
 
-```
-python3 TorrentBro.py
-```
+## Run
+
+* Clone the source code
+* Build the UI & resources :
+  ```
+  python3 build.py build
+  ```
+* Run :
+  ```
+  python3 TorrentBro.py
+  ```
