@@ -6,6 +6,10 @@ A cross-platform Torrent Browser.
 
 * Python 3
 * PyQt5
+* python-dateutil
+* lxml
+* purl
+* cssselect
 
 ## Install
 
