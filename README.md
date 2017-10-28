@@ -15,6 +15,13 @@ python3 setup.py install
 
 Or if you have the requirements, then you can directly [run](#run) without installing.
 
+## Requirements
+
+* python-dateutil
+* lxml
+* purl
+* cssselect
+
 ## Run
 
 * Clone the source code
