@@ -4,12 +4,12 @@ Handles torrent search
 
 import urllib
 
-from PyQt5.QtCore import QThread, pyqtSignal
+from PyQt5.QtCore import QObject, pyqtSignal
 
 from torrentbro.lib.tpb import TPB
 
 
-class FetchTorrentThread(QThread):
+class FetchTorrentWorker(QObject):
 
     action = None
     values = []
@@ -18,26 +18,17 @@ class FetchTorrentThread(QThread):
     finished = pyqtSignal(str, object)
 
     def __init__(self, action, *values):
-        QThread.__init__(self)
+        super().__init__()
 
         self.action = action
         self.values = values
         self.runs = True
 
-    def __del__(self):
-        self.wait()
-
     def stop(self):
         self.runs = False
 
-    def checkIfStopped(self):
-        if not self.runs:
-            self.quit()
-            self.wait()
-            self.terminate()
-            return True
-        else:
-            return False
+    def isStopped(self):
+        return not self.runs
 
     def _search(self):
         searchQuery = self.values[0]
@@ -47,7 +38,7 @@ class FetchTorrentThread(QThread):
             self.tpb = TPB('https://thepiratebay.org')
             torrents = self.tpb.search(searchQuery)
 
-            if self.checkIfStopped():
+            if self.isStopped():
                 return
 
             torrentCount = 0
@@ -67,14 +58,14 @@ class FetchTorrentThread(QThread):
 
             files = torrent.files
 
-            if self.checkIfStopped():
+            if self.isStopped():
                 return
 
             self.finished.emit('torrentInfoFiles', files)
 
             description = torrent.info
 
-            if self.checkIfStopped():
+            if self.isStopped():
                 return
 
             self.finished.emit('torrentInfoDescription', description)

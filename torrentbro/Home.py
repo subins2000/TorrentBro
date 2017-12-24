@@ -6,11 +6,11 @@ import subprocess
 import sys
 
 from PyQt5 import uic, QtCore
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QThread
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow, QWidget, QAction, qApp, QStyle, QDesktopWidget, QListWidget, QListWidgetItem, QPushButton, QLineEdit, QTextBrowser, QStatusBar
 
-from torrentbro.lib.FetchTorrentThread import *
+from torrentbro.lib.FetchTorrentWorker import *
 from torrentbro.lib.utils import *
 from torrentbro.ui import *
 
@@ -20,6 +20,7 @@ class Home(QMainWindow):
     baseDir = None
 
     torrentListInfo = []
+    threads = []
 
     FTT = None
 
@@ -64,6 +65,24 @@ class Home(QMainWindow):
         self.ui.introText.hide()
         self.ui.torrentList.show()
 
+    def startFetchTorrentThread(self, action, arguments = {}):
+        worker = FetchTorrentWorker(action, arguments)
+
+        thread = QThread()
+        self.threads.append((thread, worker))  # need to store worker too otherwise will be gc'd
+
+        worker.moveToThread(thread)
+        worker.finished.connect(self.onFetchTorrentThreadResponse)
+
+        thread.started.connect(worker.run)
+        thread.start()
+
+    def stopFetchTorrentThreads(self):
+        for thread in self.threads:
+            thread[1].stop() # Worker
+            thread[0].quit()
+            thread[0].wait()
+
     def onSearch(self):
         searchQuery = self.ui.searchTextbox.text()
 
@@ -78,17 +97,14 @@ class Home(QMainWindow):
 
         self.ui.statusBar.showMessage('Searching')
 
-        self.stopFTT()
-
-        self.FTT = FetchTorrentThread('search', searchQuery)
-        self.FTT.finished.connect(self.threadOnResponse)
-        self.FTT.start()
+        self.stopFetchTorrentThreads()
+        self.startFetchTorrentThread('search', searchQuery)
 
     '''
     Handle response from thread
     '''
 
-    def threadOnResponse(self, action, *result):
+    def onFetchTorrentThreadResponse(self, action, *result):
         if (action == 'searchResultItem'):
             torrent = result[0]
 
@@ -142,11 +158,8 @@ class Home(QMainWindow):
         selectedTorrentIndex = self.ui.torrentList.currentRow()
         torrent = self.ui.torrentListInfo[selectedTorrentIndex]
 
-        self.stopFTT()
-
-        self.FTT = FetchTorrentThread('torrentDetailedInfo', torrent)
-        self.FTT.finished.connect(self.threadOnResponse)
-        self.FTT.start()
+        self.stopFetchTorrentThreads()
+        self.startFetchTorrentThread('torrentDetailedInfo', torrent)
 
         '''
         Clear files list and description
