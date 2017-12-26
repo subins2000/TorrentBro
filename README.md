@@ -28,5 +28,5 @@ Or if you have the requirements, then you can directly [run](#run) without insta
   ```
 * Run :
   ```
-  python3 TorrentBro.py
+  python3 torrentbro.py
   ```
