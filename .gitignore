@@ -11,3 +11,7 @@ __pycache__/
 
 # Sublime project files
 *.sublime*
+
+build/
+dist/
+.egg*
