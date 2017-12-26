@@ -19,6 +19,6 @@ setup(
     ],
     packages=find_packages(exclude=['designer']),
     entry_points={'gui_scripts': [
-        'torrentbro = torrentbro.torrentbro:main'
+        'torrentbro = torrentbro.TorrentBro:main'
     ]},
 )
