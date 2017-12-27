@@ -12,7 +12,8 @@ from PyQt5.QtWidgets import QMainWindow, QWidget, QAction, qApp, QStyle, QDeskto
 
 from torrentbro.lib.FetchTorrentWorker import *
 from torrentbro.lib.utils import *
-from torrentbro.ui import *
+from torrentbro.Settings import *
+from torrentbro.ui import Ui_Home
 
 
 class Home(QMainWindow):
@@ -55,11 +56,15 @@ class Home(QMainWindow):
 
     def initMenubar(self):
         self.ui.quitAction.triggered.connect(qApp.quit)
+        self.ui.settingsAction.triggered.connect(self.openSettingsDialog)
 
     def initIntro(self):
         self.ui.torrentList.hide()
         self.ui.torrentInfo.hide()
         self.ui.introText.show()
+
+    def openSettingsDialog(self):
+        dialog = Settings()
 
     def toggleListDisplay(self):
         self.ui.introText.hide()
