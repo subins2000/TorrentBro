@@ -20,11 +20,7 @@ import time
 
 from .utils import URL
 
-if sys.version_info >= (3, 0):
-    import urllib.request
-    unicode = str
-else:
-    import urllib2.request
+import requests
 
 
 def self_if_parameters(func):
@@ -57,13 +53,16 @@ class List(object):
         on page.
         """
 
-        request = urllib.request.Request(
-            self.url, headers={'User-Agent': "Magic Browser"})
-        response = urllib.request.urlopen(request).read()
+        request = requests.get(
+            self.url,
+            headers={'User-Agent': "Magic Browser"}
+        )
+        response = request.text
 
         root = html.document_fromstring(str(response))
         items = [self._build_torrent(row) for row in
                  self._get_torrent_rows(root)]
+
         for item in items:
             yield item
 
@@ -94,7 +93,7 @@ class List(object):
 
         # this column with all important info
         links = cols[1].findall('.//a')  # get 4 a tags from this columns
-        title = unicode(links[0].text)
+        title = str(links[0].text)
         url = self.url.build().path(links[0].get('href'))
         magnet_link = links[1].get('href')  # the magnet download link
         try:
@@ -192,12 +191,17 @@ class Search(Paginated):
     """
     base_path = '/search'
 
-    def __init__(self, base_url, query, page='0', order='7', category='0'):
+    def __init__(self, base_url, proxy_url, query, page='0', order='7', category='0'):
         super(Search, self).__init__()
-        self.url = URL(base_url, self.base_path,
-                       segments=['query', 'page', 'order', 'category'],
-                       defaults=[query, str(page), str(order), str(category)],
-                       )
+
+        self.url = URL(
+            base_url,
+            self.base_path,
+            segments=['query', 'page', 'order', 'category'],
+            defaults=[query, str(page), str(order), str(category)],
+        )
+
+        self.proxy_url = proxy_url
 
     @self_if_parameters
     def query(self, query=None):
@@ -236,12 +240,16 @@ class Recent(Paginated):
     """
     base_path = '/recent'
 
-    def __init__(self, base_url, page='0'):
+    def __init__(self, base_url, proxy_url, page='0'):
         super(Recent, self).__init__()
-        self.url = URL(base_url, self.base_path,
-                       segments=['page'],
-                       defaults=[str(page)],
-                       )
+        self.url = URL(
+            base_url,
+            self.base_path,
+            segments=['page'],
+            defaults=[str(page)],
+        )
+
+        self.proxy_url = proxy_url
 
 
 class Top(List):
@@ -250,11 +258,15 @@ class Top(List):
     """
     base_path = '/top'
 
-    def __init__(self, base_url, category='0'):
-        self.url = URL(base_url, self.base_path,
-                       segments=['category'],
-                       defaults=[str(category)],
-                       )
+    def __init__(self, base_url, proxy_url, category='0'):
+        self.url = URL(
+            base_url,
+            self.base_path,
+            segments=['category'],
+            defaults=[str(category)],
+        )
+
+        self.proxy_url = proxy_url
 
     @self_if_parameters
     def category(self, category=None):
@@ -273,15 +285,16 @@ class TPB(object):
     Passes on base_url to the instantiated Search, Recent and Top classes.
     """
 
-    def __init__(self, base_url):
+    def __init__(self, base_url, proxy_url = None):
         self.base_url = base_url
+        self.proxy_url = proxy_url
 
     def search(self, query, page=0, order=7, category=0, multipage=False):
         """
         Searches TPB for query and returns a list of paginated Torrents capable
         of changing query, categories and orders.
         """
-        search = Search(self.base_url, query, page, order, category)
+        search = Search(self.base_url, self.proxy_url, query, page, order, category)
         if multipage:
             search.multipage()
         return search
@@ -290,13 +303,13 @@ class TPB(object):
         """
         Lists most recent Torrents added to TPB.
         """
-        return Recent(self.base_url, page)
+        return Recent(self.base_url, self.proxy_url, page)
 
     def top(self, category=0):
         """
         Lists top Torrents on TPB optionally filtering by category.
         """
-        return Top(self.base_url, category)
+        return Top(self.base_url, self.proxy_url, category)
 
 
 class Torrent(object):
@@ -325,9 +338,11 @@ class Torrent(object):
     def info(self):
         if self._info is None:
 
-            request = urllib.request.Request(
-                self.url, headers={'User-Agent': "Magic Browser"})
-            response = urllib.request.urlopen(request).read()
+            request = requests.get(
+                self.url,
+                headers={'User-Agent': "Magic Browser"}
+            )
+            response = request.text
 
             root = html.document_fromstring(response)
             info = root.cssselect('#details .nfo pre')[0].text_content()
@@ -340,9 +355,11 @@ class Torrent(object):
             path = '/ajax_details_filelist.php'
             url = self.url.path(path).query_param('id', self.id)
 
-            request = urllib.request.Request(
-                url, headers={'User-Agent': "Magic Browser"})
-            response = urllib.request.urlopen(request).read()
+            request = requests.get(
+                self.url,
+                headers={'User-Agent': "Magic Browser"}
+            )
+            response = request.text
 
             root = html.document_fromstring(response)
 
@@ -352,7 +369,7 @@ class Torrent(object):
                 self._files = {}
             else:
                 for row in rows:
-                    name, size = [unicode(v.text_content())
+                    name, size = [str(v.text_content())
                               for v in row.findall('.//td')]
                     self._files[name] = size.replace('\xa0', ' ')
         return self._files

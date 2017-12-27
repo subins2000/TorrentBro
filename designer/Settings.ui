@@ -54,7 +54,7 @@
      <x>10</x>
      <y>40</y>
      <width>381</width>
-     <height>81</height>
+     <height>131</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -75,7 +75,7 @@
       <x>0</x>
       <y>0</y>
       <width>381</width>
-      <height>81</height>
+      <height>131</height>
      </rect>
     </property>
     <layout class="QHBoxLayout">
@@ -95,6 +95,20 @@
         <widget class="QLabel" name="portLabel">
          <property name="text">
           <string>Socks5 Port</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="usernameLabel">
+         <property name="text">
+          <string>Username</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="usernameLabel_2">
+         <property name="text">
+          <string>Password</string>
          </property>
         </widget>
        </item>
@@ -151,7 +165,57 @@
           <bool>true</bool>
          </property>
          <property name="placeholderText">
-          <string>5051</string>
+          <string>9050</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPlainTextEdit" name="usernameInput">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>25</height>
+          </size>
+         </property>
+         <property name="verticalScrollBarPolicy">
+          <enum>Qt::ScrollBarAlwaysOff</enum>
+         </property>
+         <property name="tabChangesFocus">
+          <bool>true</bool>
+         </property>
+         <property name="placeholderText">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPlainTextEdit" name="passwordInput">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>25</height>
+          </size>
+         </property>
+         <property name="verticalScrollBarPolicy">
+          <enum>Qt::ScrollBarAlwaysOff</enum>
+         </property>
+         <property name="tabChangesFocus">
+          <bool>true</bool>
+         </property>
+         <property name="placeholderText">
+          <string/>
          </property>
         </widget>
        </item>

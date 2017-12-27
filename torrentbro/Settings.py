@@ -25,9 +25,13 @@ class Settings(QDialog):
 
         if socks5_host:
             socks5_port = settings.value('socks5_port')
+            socks5_username = settings.value('socks5_username')
+            socks5_password = settings.value('socks5_password')
 
             self.ui.hostInput.setPlainText(socks5_host)
             self.ui.portInput.setPlainText(socks5_port)
+            self.ui.usernameInput.setPlainText(socks5_username)
+            self.ui.passwordInput.setPlainText(socks5_password)
 
             self.ui.torSettingsToggle.setChecked(True)
             self.ui.torSettings.show()
@@ -48,9 +52,13 @@ class Settings(QDialog):
     def onOk(self):
         socks5_host = self.ui.hostInput.toPlainText()
         socks5_port = self.ui.portInput.toPlainText()
+        socks5_username = self.ui.usernameInput.toPlainText()
+        socks5_password = self.ui.passwordInput.toPlainText()
 
         settings = QSettings('torrentbro', 'torrentbro')
         settings.setValue('socks5_host', socks5_host)
         settings.setValue('socks5_port', socks5_port)
+        settings.setValue('socks5_username', socks5_username)
+        settings.setValue('socks5_password', socks5_password)
 
         del settings

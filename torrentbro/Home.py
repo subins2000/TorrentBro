@@ -31,6 +31,7 @@ class Home(QMainWindow):
         self.initUI()
         self.initMenubar()
         self.initIntro()
+        self.initProxy()
 
     def initUI(self):
         self.ui = Ui_Home()
@@ -63,8 +64,25 @@ class Home(QMainWindow):
         self.ui.torrentInfo.hide()
         self.ui.introText.show()
 
+    def initProxy(self):
+        settings = QSettings('torrentbro', 'torrentbro')
+        socks5_host = settings.value('socks5_host')
+
+        if socks5_host:
+            socks5_port = settings.value('socks5_port')
+            socks5_username = settings.value('socks5_username', '')
+            socks5_password = settings.value('socks5_password', '')
+
+            socks5_url = 'socks5://%s:%s' % (socks5_host, socks5_port)
+
+            print(socks5_url)
+
+            os.environ["HTTP_PROXY"] = socks5_url
+            os.environ["HTTPS_PROXY"] = socks5_url
+
     def openSettingsDialog(self):
         dialog = Settings()
+        self.initProxy()
 
     def toggleListDisplay(self):
         self.ui.introText.hide()
