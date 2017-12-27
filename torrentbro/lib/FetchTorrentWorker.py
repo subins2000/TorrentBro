@@ -7,6 +7,7 @@ import urllib
 from PyQt5.QtCore import QObject, pyqtSignal
 
 from torrentbro.lib.tpb import TPB
+from torrentbro.lib.tpb.tpb import HitCloudflare
 
 
 class FetchTorrentWorker(QObject):
@@ -49,7 +50,9 @@ class FetchTorrentWorker(QObject):
             self.finished.emit('searchResultSummary', torrentCount)
 
         except urllib.error.URLError as e:
-            self.finished.emit('internetFailed', str(e.reason))
+            self.finished.emit('error', str(e.reason))
+        except HitCloudflare:
+            self.finished.emit('error', 'Hit cloudflare protection page.')
 
     def _torrentDetailedInfo(self):
         torrent = self.values[0]
@@ -71,7 +74,9 @@ class FetchTorrentWorker(QObject):
             self.finished.emit('torrentInfoDescription', description)
 
         except urllib.error.URLError as e:
-            self.finished.emit('internetFailed', str(e.reason))
+            self.finished.emit('error', str(e.reason))
+        except HitCloudflare:
+            self.finished.emit('error', 'Hit cloudflare protection page.')
 
     def run(self):
         '''

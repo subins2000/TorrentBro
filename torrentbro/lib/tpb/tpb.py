@@ -37,6 +37,8 @@ def self_if_parameters(func):
             return result
     return wrapper
 
+class HitCloudflare(Exception):
+    pass
 
 class List(object):
     """
@@ -58,6 +60,9 @@ class List(object):
             headers={'User-Agent': "Magic Browser"}
         )
         response = request.text
+
+        if 'Attention Required' in response:
+            raise HitCloudflare()
 
         root = html.document_fromstring(str(response))
         items = [self._build_torrent(row) for row in

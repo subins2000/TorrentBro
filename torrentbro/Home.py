@@ -66,14 +66,15 @@ class Home(QMainWindow):
 
     def initProxy(self):
         settings = QSettings('torrentbro', 'torrentbro')
-        socks5_host = settings.value('socks5_host')
+        socks5 = settings.value('socks5', False)
 
-        if socks5_host:
+        if socks5 == 'True':
+            socks5_host = settings.value('socks5_host')
             socks5_port = settings.value('socks5_port')
             socks5_username = settings.value('socks5_username', '')
             socks5_password = settings.value('socks5_password', '')
 
-            socks5_url = 'socks5://%s:%s' % (socks5_host, socks5_port)
+            socks5_url = 'socks5://%s:%s@%s:%s' % (socks5_username, socks5_password, socks5_host, socks5_port)
 
             print(socks5_url)
 
@@ -134,9 +135,10 @@ class Home(QMainWindow):
             self.ui.torrentList.addItem(torrent.title)
             self.ui.torrentListInfo.append(torrent)
 
-        elif (action == 'internetFailed'):
+        elif (action == 'error'):
             self.ui.statusBar.showMessage(
-                'Internet operation failed - ' + result[0])
+                'Operation failed - ' + result[0]
+            )
 
         elif (action == 'searchResultSummary'):
             resultCount = result[0]

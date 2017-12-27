@@ -120,104 +120,24 @@
         <enum>QLayout::SetMinimumSize</enum>
        </property>
        <item>
-        <widget class="QPlainTextEdit" name="hostInput">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>25</height>
-          </size>
-         </property>
-         <property name="verticalScrollBarPolicy">
-          <enum>Qt::ScrollBarAlwaysOff</enum>
-         </property>
-         <property name="tabChangesFocus">
-          <bool>true</bool>
-         </property>
+        <widget class="QLineEdit" name="hostInput">
          <property name="placeholderText">
           <string>127.0.0.1</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPlainTextEdit" name="portInput">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>25</height>
-          </size>
-         </property>
-         <property name="verticalScrollBarPolicy">
-          <enum>Qt::ScrollBarAlwaysOff</enum>
-         </property>
-         <property name="tabChangesFocus">
-          <bool>true</bool>
-         </property>
+        <widget class="QLineEdit" name="portInput">
          <property name="placeholderText">
           <string>9050</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPlainTextEdit" name="usernameInput">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>25</height>
-          </size>
-         </property>
-         <property name="verticalScrollBarPolicy">
-          <enum>Qt::ScrollBarAlwaysOff</enum>
-         </property>
-         <property name="tabChangesFocus">
-          <bool>true</bool>
-         </property>
-         <property name="placeholderText">
-          <string/>
-         </property>
-        </widget>
+        <widget class="QLineEdit" name="usernameInput"/>
        </item>
        <item>
-        <widget class="QPlainTextEdit" name="passwordInput">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>25</height>
-          </size>
-         </property>
-         <property name="verticalScrollBarPolicy">
-          <enum>Qt::ScrollBarAlwaysOff</enum>
-         </property>
-         <property name="tabChangesFocus">
-          <bool>true</bool>
-         </property>
-         <property name="placeholderText">
-          <string/>
-         </property>
-        </widget>
+        <widget class="QLineEdit" name="passwordInput"/>
        </item>
       </layout>
      </item>
