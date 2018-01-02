@@ -6,8 +6,7 @@ import urllib
 
 from PyQt5.QtCore import QObject, pyqtSignal
 
-from torrentbro.lib.tpb import TPB
-from torrentbro.lib.tpb.tpb import HitCloudflare
+from torrentbro.lib.utilities.Config import Config
 
 
 class FetchTorrentWorker(QObject):
@@ -36,7 +35,9 @@ class FetchTorrentWorker(QObject):
 
         try:
 
-            self.tpb = TPB('https://thepiratebay.org')
+            import torrentbro.lib.modules.thepiratebay as tpb
+            tpb.main(searchQuery, 1)
+
             torrents = self.tpb.search(searchQuery)
 
             if self.isStopped():
