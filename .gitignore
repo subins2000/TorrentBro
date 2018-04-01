@@ -15,3 +15,10 @@ __pycache__/
 build/
 dist/
 .egg*
+
+# Snapcraft
+parts/
+prime/
+snap/
+stage/
+*.snap
