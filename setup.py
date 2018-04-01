@@ -15,7 +15,8 @@ setup(
         'python-dateutil',
         'lxml',
         'cssselect',
-        'requests'
+        'requests',
+        'pyqt5'
     ],
     packages=find_packages(exclude=['designer']),
     entry_points={'gui_scripts': [
