@@ -1,0 +1,19 @@
+name: torrentbro
+version: git
+summary: Torrent Browser
+description: |
+    TorrentBro is a torrent browser application. Find, search
+    and get download link of torrents.
+
+grade: devel
+confinement: devmode
+
+apps:
+    torrentbro:
+        command: torrentbro
+
+parts:
+    torrentbro:
+        plugin: python
+        python-version: python3
+        source: .
