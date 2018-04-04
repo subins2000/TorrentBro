@@ -31,6 +31,10 @@ Or if you have the requirements, then you can directly [run](#run) without insta
   python3 torrentbro.py
   ```
 
+## Snap Package
+
+A snap package can be made by running `snapcraft` directly.
+
 ## License
 
 Copyright (C) 2017 Subin Siby <subinsb.com>
